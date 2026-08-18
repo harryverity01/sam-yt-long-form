@@ -79,6 +79,7 @@ Stored in `.env` at the repo root. Never committed.
 | `sam-yt-cutter` | 1 | Transcribe + viral arc proposal + multi-cam assembly + colour grade |
 | `sam-yt-broll-director` | 2 | Read transcript, classify every b-roll slot with creation brief |
 | `sam-yt-broll-producer` | 3 | Generate assets in parallel + music + compose + verify |
+| `sam-longform-cut` | Standalone | Pulls a raw call from the shared R2 bucket and cuts a trailer plus a 20-45 min long form. Sam only, filler and dead air stripped, zero drift. |
 
 Each skill is self-contained. The orchestrator chains them but they can be invoked individually for checkpoint editing.
 
