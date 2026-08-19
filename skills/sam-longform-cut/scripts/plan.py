@@ -15,7 +15,7 @@ GAP_SPLIT_ABOVE = 0.34   # a word gap longer than this becomes a cut
 HEAD_PAD        = 0.10   # breath in front of a kept run
 TAIL_PAD        = 0.22   # breath after a kept run
 BLOCK_TAIL      = 0.34   # extra breath at the end of a section
-MAX_WORD_LEN    = 3.0    # clamp runaway whisper tokens
+MAX_WORD_LEN    = 3.0    # clamp a runaway token (a held word, a mislabelled breath)
 MIN_RUN_WORDS   = 2      # drop 1-word orphan runs ("yeah", "okay")
 
 # connectives never left dangling at the end of a section

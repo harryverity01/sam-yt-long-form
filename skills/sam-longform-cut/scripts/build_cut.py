@@ -12,7 +12,7 @@ def load_words():
             a, b = float(w['start']), float(w['end'])
             if b <= a:
                 b = a + 0.06
-            if b - a > P.MAX_WORD_LEN:          # runaway whisper token
+            if b - a > P.MAX_WORD_LEN:          # runaway token, see plan.MAX_WORD_LEN
                 b = a + P.MAX_WORD_LEN
             W.append({'t': w['word'].strip(), 'a': a, 'b': b,
                       'spk': w.get('speaker', '?')})

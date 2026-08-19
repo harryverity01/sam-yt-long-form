@@ -30,8 +30,8 @@ python3 dl.py "podcasts/2026-08-13-my-shoot/raw.mov" src/source.mov
 python3 init.py src/source.mov
 ```
 
-You need python3, ffmpeg, numpy and boto3. An ElevenLabs key in `ELEVENLABS_API_KEY`
-covers transcription and the trailer music bed.
+You need python3, ffmpeg, numpy, requests and boto3. An ElevenLabs key in
+`ELEVENLABS_API_KEY` covers transcription and the trailer music bed.
 
 ## The house rules, applied every time
 
@@ -55,12 +55,40 @@ and take the newest folder. **Whoever asks will name the shoot from memory and t
 is often wrong.** On the first run the request was "the Tony interview" and the file was
 `Tobi Group Coaching 2`. Match on recency, not on the name, and say what you found.
 
-The folder often already holds a word-level transcript (`<name>.json`), an SRT, a speaker
-map and a summary. Pull everything small first and read it. Only then pull the master.
-A 12-thread ranged GET runs at about 125 MB/s, so 16 GB takes about two minutes
-(`scripts/dl.py`).
+The folder often already holds a transcript, an SRT, a speaker map and a summary. Pull
+everything small first and read it for orientation. **Do not cut from it.** It is almost
+always Whisper, and its timings are not tight enough to cut on. Run step 2 anyway. Only
+then pull the master. A 12-thread ranged GET runs at about 125 MB/s, so 16 GB takes
+about two minutes (`scripts/dl.py`).
 
-## 2. Read before you cut
+## 2. Transcribe with Scribe
+
+```bash
+python3 transcribe.py
+```
+
+**ElevenLabs Scribe, never Whisper.** This is not a preference. Every cut in this skill
+lands on a word boundary, so the transcript's timings are the edit. Whisper's word times
+drift by tens of milliseconds. At that error a cut clips the consonant off the front of a
+word, or leaves the tail of an "um" you thought you removed. Scribe is tight enough to
+cut on. If you only have a Whisper transcript, re-run Scribe over the audio anyway.
+
+One call, diarized, so the speaker labels stay consistent across the whole recording.
+Chunking the audio renumbers the speakers and the host stops being the same person
+halfway through.
+
+It writes `meta/<shoot>.json` as segments of words:
+
+```json
+{"segments": [{"start": 0.1, "end": 0.9, "text": "So the brain",
+               "words": [{"word": "So", "start": 0.1, "end": 0.32,
+                          "speaker": "speaker_0"}]}]}
+```
+
+A new segment starts on a speaker change or a silence of 0.8 s or more. Needs
+`ELEVENLABS_API_KEY`.
+
+## 2b. Read before you cut
 
 `scripts/timeline.py` prints one line per transcript segment with speaker and timecode.
 Read the whole thing. It is 900 lines and it is the job. Everything after this is
@@ -99,7 +127,7 @@ python3 build_cut.py trailer
 
 It selects Sam's words by overlap (containment silently drops boundary words), then:
 
-- clamps runaway Whisper tokens to 3 seconds, or gap detection breaks
+- clamps a runaway token to 3 seconds, or gap detection breaks
 - drops `um`/`uh` and stutters
 - splits into runs at any word gap over 0.34 s — that is the dead-air removal
 - pads each run 0.10 s in front and 0.22 s behind, 0.34 s extra at a section end

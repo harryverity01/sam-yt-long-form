@@ -17,7 +17,7 @@ def transcript():
         return p
     hits = sorted(glob.glob('meta/*.json'))
     if not hits:
-        raise SystemExit("No transcript. Run the transcribe step, see SKILL.md step 2.")
+        raise SystemExit("No transcript. Run: python3 transcribe.py")
     if len(hits) > 1:
         raise SystemExit(f"Several transcripts in meta/, name one in shoot.json: {hits}")
     return hits[0]

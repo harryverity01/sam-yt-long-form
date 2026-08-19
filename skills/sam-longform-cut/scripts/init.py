@@ -57,4 +57,4 @@ if __name__ == '__main__':
     r = subprocess.run([ff, "-v", "error", "-i", dst, "-map", "0:v:0", "-frames:v", "1",
                         "-f", "null", "-"], capture_output=True, text=True)
     print("readable:", "yes" if r.returncode == 0 else "NO -> " + r.stderr.strip()[:200])
-    print("\nNext: transcribe. See SKILL.md step 2.")
+    print("\nNext: python3 transcribe.py   (ElevenLabs Scribe, see SKILL.md step 2)")
