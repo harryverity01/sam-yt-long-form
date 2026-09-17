@@ -3,6 +3,3 @@ numpy>=1.26.0
 scipy>=1.11.0
 python-dotenv>=1.0.0
 Pillow>=10.0.0
-# demo-screenrec (software demos from a talking head)
-opencv-python-headless>=4.10
-playwright>=1.45
