@@ -45,12 +45,16 @@ else
     python3 -m pip install --user -r "$REPO_DIR/requirements.txt"
 fi
 echo "✓ Python deps installed"
+# demo-screenrec drives a real browser through Playwright
+python3 -m playwright install chromium >/dev/null 2>&1 && echo "✓ Playwright Chromium installed" || echo "⚠️  Playwright Chromium install failed (demo-screenrec needs it): python3 -m playwright install chromium"
+# a wallpaper for the demo stage, if none is there yet
+[ -f "$REPO_DIR/skills/demo-screenrec/assets/wallpaper.png" ] || python3 "$REPO_DIR/skills/demo-screenrec/scripts/make_wallpaper.py" "$REPO_DIR/skills/demo-screenrec/assets/wallpaper.png" >/dev/null && echo "✓ demo-screenrec wallpaper ready"
 echo ""
 
 # 3. Symlink skills
 echo "▶ Installing skills to $SKILLS_DIR..."
 mkdir -p "$SKILLS_DIR"
-for skill in sam-yt-pipeline sam-yt-cutter sam-yt-broll-director sam-yt-broll-producer; do
+for skill in sam-yt-pipeline sam-yt-cutter sam-yt-broll-director sam-yt-broll-producer demo-screenrec; do
     target="$SKILLS_DIR/$skill"
     if [ -e "$target" ] && [ ! -L "$target" ]; then
         echo "❌ $target exists and is not a symlink — refusing to overwrite"
@@ -81,8 +85,8 @@ echo ""
 
 # 5. Verify install
 echo "▶ Verifying install..."
-if [ -d "$SKILLS_DIR/sam-yt-pipeline" ] && [ -f "$SKILLS_DIR/sam-yt-pipeline/SKILL.md" ]; then
-    echo "✓ All 4 skills installed"
+if [ -d "$SKILLS_DIR/sam-yt-pipeline" ] && [ -f "$SKILLS_DIR/sam-yt-pipeline/SKILL.md" ] && [ -f "$SKILLS_DIR/demo-screenrec/SKILL.md" ]; then
+    echo "✓ All skills installed"
 else
     echo "❌ Install verification failed"
     exit 1

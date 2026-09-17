@@ -71,6 +71,14 @@ Install does:
 
 Stored in `.env` at the repo root. Never committed.
 
+## demo-screenrec: software demos without screen recording
+
+Talk to camera about a tool. The `demo-screenrec` skill fetches the real interface, drives it with a
+scripted cursor at 2x, films it on a desktop stage next to your presenter card, and adds the smooth
+zooms, tilted wide shots and chapter pills of a top-tier tech review. Nothing to screen record. Full
+guide in `skills/demo-screenrec/SKILL.md`. It needs Playwright's Chromium (the installer fetches it)
+and ffmpeg; no API keys.
+
 ## The 4 skills
 
 | Skill | Phase | What it does |

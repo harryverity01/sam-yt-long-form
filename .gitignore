@@ -5,3 +5,8 @@ __pycache__/
 .uv/
 uv.lock
 .DS_Store
+# demo-screenrec media: captures, cuts and renders never go in the repo
+skills/demo-screenrec/assets/wallpaper.png
+**/cap/
+**/cut/
+**/out/
